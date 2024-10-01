@@ -1,0 +1,658 @@
+<html></html>
+
+<head>
+	<title>Presto! Distilling steps and layers for accelerating music generation. </title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<meta name="theme-color" content="#563d7c">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+<style>
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+  }
+
+td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+}
+
+</style>
+</head>
+
+<body bgcolor="#FFFFFF" link="#000000" vlink="#000000" alink="#000000">
+
+<div class="text-center">
+  <br>
+    <div class="text-wrap" width="200px">
+    <font face="helvetica , ariel, &#39;sans serif&#39;" size="6">
+      <b>Presto! Distilling Steps and Layers for Accelerating Music Generation.</b><br><br>
+    </font>
+    </div>
+
+   
+
+
+
+        
+      
+      <div class="container mt-4" style="max-width: 1000px;">
+        <div class="container">
+    
+
+            <div class="container mt-4 " style="max-width: 950px;">
+              <div class="container">
+                <div class="section">
+                  <!-- # Show video -->
+                  <br>
+                  <!-- Show Abstract -->
+                  <h1 class="text-justify">Abstract</h1>
+                  <hr>
+                  <p class="pr-5 pl-5 text-justify">
+                    Despite advances in diffusion-based text-to-music (TTM) methods, efficient, high-quality generation remains a challenge. 
+                    We introduce Presto!, an approach to inference acceleration for score-based diffusion transformers via reducing both sampling steps and cost per step. 
+                    To reduce steps, we develop a new score-based distribution matching distillation (DMD) method for the EDM-family of diffusion models, the first GAN-based distillation method for TTM. 
+                    To reduce the cost per step, we develop a simple, but powerful improvement to a recent layer distillation method that improves learning via preserving hidden state variance. 
+                    Finally, we combine our improved step and layer distillation methods together for a dual-faceted approach.
+                    We evaluate our step and layer distillation methods independently and show each yield best-in-class performance. 
+                    Furthermore, we find our combined distillation method can generate high-quality outputs with improved diversity accelerating our base model by 10-18x (32 second output in 230ms, 15x faster than the comparable SOTA model)
+                    --- the fastest TTM model to our knowledge. 
+                  </p>
+                </div><br>
+
+                <!-- <div class="section text-left" div style='text-align:left'>
+                  <h1>Bibtex</h1>
+                  <div style="background-color: #e9ecef; text-align:left;" >
+                  <pre>
+                    <code>
+                    @article{Wu2023MusicControlNet,
+                        title={Presto! Distilling steps and layers for accelerating music generation.}, 
+                        author={Anonymous ICLR},
+                        year={2025},
+                        eprint={TBD},
+                        archivePrefix={arXiv},
+                        primaryClass={cs.SD}
+                    }</code>
+                  </pre>
+                  </div>
+                </div> -->
+      
+
+
+
+          <div class="section text-justify">
+            <h1>Song Describer Prompt Examples (Cherry-picked)</h1>
+            Random Song Describer prompts. A batch of 4 was generated and a human selected the best one.
+            <br><br>
+            <table class="table table-sm text-center" style="vertical-align: middle;">
+            <tbody>
+
+                <tr>
+                    </tr>        
+                    <tr>
+                    <td colspan="12"><h5 class="text-center">Text</h5></td>
+                    <td colspan="4"><h5 class="text-center">Presto (ours)</h5></td>
+                    <td colspan="4"><h5 class="text-center">Base DiT</h5></td>
+                    <td colspan="4"><h5 class="text-center">Stable Audio Open</h5></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="12"><p>1093792-Intense pop song with a base of piano and synthesizers</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1093792-Intense pop song with a base of piano and synthesizers.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1093792-Intense pop song with a base of piano and synthesizers.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1093792-Intense pop song with a base of piano and synthesizers.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+
+                   <tr>
+                    <td colspan="12"><p>1143013-This song starts with a ukulele and builds up with percussion using claps and an acoustic guitar that plays the same rhythm as the ukulele with melody played on a xylophone and has a very upbeat feel</p></td>
+                    <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1143013-This song starts with a ukulele and builds up with percussion using claps and an acoustic guitar that plays the same rhythm as the ukulele with melody played on a xylophone and has a very upbeat feel.mp3" type="audio/mp3"></audio> </td>
+                    <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1143013-This song starts with a ukulele and builds up with percussion using claps and an acoustic guitar that plays the same rhythm as the ukulele with melody played on a xylophone and has a very upbeat feel.mp3" type="audio/mp3"></audio> </td>
+                    <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1143013-This song starts with a ukulele and builds up with percussion using claps and an acoustic guitar that plays the same rhythm as the ukulele with melody played on a xylophone and has a very upbeat feel.mp3" type="audio/mp3"></audio> </td>
+                 </tr>
+
+                 <tr>
+                    <td colspan="12"><p>1078393-Groovy funky song with an intimate touch, perfect for a small self contained dance</p></td>
+                    <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1078393-Groovy funky song with an intimate touch, perfect for a small self contained dance.mp3" type="audio/mp3"></audio> </td>
+                    <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1078393-Groovy funky song with an intimate touch, perfect for a small self contained dance.mp3" type="audio/mp3"></audio> </td>
+                    <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1078393-Groovy funky song with an intimate touch, perfect for a small self contained dance.mp3" type="audio/mp3"></audio> </td>
+               </tr>
+                
+
+                    <tr>
+                        <td colspan="12"><p>108303-Delayed synth blips and electronic drums combine on an ambient electronica track</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/108303-Delayed synth blips and electronic drums combine on an ambient electronica track.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/108303-Delayed synth blips and electronic drums combine on an ambient electronica track.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/108303-Delayed synth blips and electronic drums combine on an ambient electronica track.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1169705-Beautiful and evocative piece of classical piano music with a nostalgic touch</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1169705-Beautiful and evocative piece of classical piano music with a nostalgic touch.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1169705-Beautiful and evocative piece of classical piano music with a nostalgic touch.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1169705-Beautiful and evocative piece of classical piano music with a nostalgic touch.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1166070-This track sound like a Christmas song with bells as the melody and strings as support</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1166070-This track sound like a Christmas song with bells as the melody and strings as support.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1166070-This track sound like a Christmas song with bells as the melody and strings as support.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1166070-This track sound like a Christmas song with bells as the melody and strings as support.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1126719-Alternative electronic song with experimental sounds and unsettling vibe</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1126719-Alternative electronic song with experimental sounds and unsettling vibe.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1126719-Alternative electronic song with experimental sounds and unsettling vibe.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1126719-Alternative electronic song with experimental sounds and unsettling vibe.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1093793-Electronic disco music about love that builds up quickly and has a dance beat to it</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1093793-Electronic disco music about love that builds up quickly and has a dance beat to it.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1093793-Electronic disco music about love that builds up quickly and has a dance beat to it.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1093793-Electronic disco music about love that builds up quickly and has a dance beat to it.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1163315-A relaxing jazz song, for focusing, that evokes sentimental feeling</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1163315-A relaxing jazz song, for focusing, that evokes sentimental feeling.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1163315-A relaxing jazz song, for focusing, that evokes sentimental feeling.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1163315-A relaxing jazz song, for focusing, that evokes sentimental feeling.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1113971-Progressive electronic song with an intro of African percussions</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1113971-Progressive electronic song with an intro of African percussions.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1113971-Progressive electronic song with an intro of African percussions.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1113971-Progressive electronic song with an intro of African percussions.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1162034-Step onto a cruise and sip your drink in your Hawaiian shirt while listening to this track under the afternoon breeze in StTropez</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1162034-Step onto a cruise and sip your drink in your Hawaiian shirt while listening to this track under the afternoon breeze in StTropez.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1162034-Step onto a cruise and sip your drink in your Hawaiian shirt while listening to this track under the afternoon breeze in StTropez.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1162034-Step onto a cruise and sip your drink in your Hawaiian shirt while listening to this track under the afternoon breeze in StTropez.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1157362-Its a instrumental song, sounds epic and grand, like a score of a movie, has drums, keys, strings It is kind of mysterious, sad, epic spacey</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1157362-Its a instrumental song, sounds epic and grand, like a score of a movie, has drums, keys, strings It is kind of mysterious, sad, epic spacey.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1157362-Its a instrumental song, sounds epic and grand, like a score of a movie, has drums, keys, strings It is kind of mysterious, sad, epic spacey.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1157362-Its a instrumental song, sounds epic and grand, like a score of a movie, has drums, keys, strings It is kind of mysterious, sad, epic spacey.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1151409-A lullaby turned dark in its melody begins on a plucky kalimba of some kind; after an intro, a flute takes over the melody and a harp and other orchestral instruments back it up</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1151409-A lullaby turned dark in its melody begins on a plucky kalimba of some kind; after an intro, a flute takes over the melody and a harp and other orchestral instruments back it up.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1151409-A lullaby turned dark in its melody begins on a plucky kalimba of some kind; after an intro, a flute takes over the melody and a harp and other orchestral instruments back it up.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1151409-A lullaby turned dark in its melody begins on a plucky kalimba of some kind; after an intro, a flute takes over the melody and a harp and other orchestral instruments back it up.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1159370-An electronic chill out track featuring some instrument similar to santur</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1159370-An electronic chill out track featuring some instrument similar to santur.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1159370-An electronic chill out track featuring some instrument similar to santur.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1159370-An electronic chill out track featuring some instrument similar to santur.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+   
+            
+                    <tr>
+                        <td colspan="12"><p>10575-A track with elements from eurodance and indie guitars</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/10575-A track with elements from eurodance and indie guitars.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/10575-A track with elements from eurodance and indie guitars.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/10575-A track with elements from eurodance and indie guitars.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1162014-A pop-rock track very close to a proto-punk sound</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1162014-A pop-rock track very close to a proto-punk sound.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1162014-A pop-rock track very close to a proto-punk sound.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1162014-A pop-rock track very close to a proto-punk sound.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1169706-This song gives a narrative of discovery or working something out I could imagine hearing it at the end of a video game working out my companion was the bad guy or solving a mystery that was not obvio</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1169706-This song gives a narrative of discovery or working something out I could imagine hearing it at the end of a video game working out my companion was the bad guy or solving a mystery that was not obvio.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1169706-This song gives a narrative of discovery or working something out I could imagine hearing it at the end of a video game working out my companion was the bad guy or solving a mystery that was not obvio.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1169706-This song gives a narrative of discovery or working something out I could imagine hearing it at the end of a video game working out my companion was the bad guy or solving a mystery that was not obvio.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1162697-A ukulele-driven track with a turnaround harmonic progression Some melodics pads, muted electronic organ sounds  and a slide guitar enrich the backing track with simple and enthusiastic melodies</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1162697-A ukulele-driven track with a turnaround harmonic progression Some melodics pads, muted electronic organ sounds  and a slide guitar enrich the backing track with simple and enthusiastic melodies.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1162697-A ukulele-driven track with a turnaround harmonic progression Some melodics pads, muted electronic organ sounds  and a slide guitar enrich the backing track with simple and enthusiastic melodies.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1162697-A ukulele-driven track with a turnaround harmonic progression Some melodics pads, muted electronic organ sounds  and a slide guitar enrich the backing track with simple and enthusiastic melodies.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1156053-Genre seems to be Texas country music and I feel hopeful and felt like I'm in a farm with waiting for the sunset with animals walking around</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1156053-Genre seems to be Texas country music and I feel hopeful and felt like Im in a farm with waiting for the sunset with animals walking around.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1156053-Genre seems to be Texas country music and I feel hopeful and felt like Im in a farm with waiting for the sunset with animals walking around.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1156053-Genre seems to be Texas country music and I feel hopeful and felt like Im in a farm with waiting for the sunset with animals walking around.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1155158-A dramatic and emotional solo piano track modern and classic at the same time</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1155158-A dramatic and emotional solo piano track modern and classic at the same time.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1155158-A dramatic and emotional solo piano track modern and classic at the same time.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1155158-A dramatic and emotional solo piano track modern and classic at the same time.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1143012-A joyful and sweet instrumental music track which is leaves the listener with positive emotions</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1143012-A joyful and sweet instrumental music track which is leaves the listener with positive emotions.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1143012-A joyful and sweet instrumental music track which is leaves the listener with positive emotions.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1143012-A joyful and sweet instrumental music track which is leaves the listener with positive emotions.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1143152-Instrumental piano piece with a slightly classical touch and a nostalgic, bittersweet or blue mood</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1143152-Instrumental piano piece with a slightly classical touch and a nostalgic, bittersweet or blue mood.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1143152-Instrumental piano piece with a slightly classical touch and a nostalgic, bittersweet or blue mood.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1143152-Instrumental piano piece with a slightly classical touch and a nostalgic, bittersweet or blue mood.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1169708-Western Classical music, piano, multiple sections, happy and nostalgic</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1169708-Western Classical music, piano, multiple sections, happy and nostalgic.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1169708-Western Classical music, piano, multiple sections, happy and nostalgic.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1169708-Western Classical music, piano, multiple sections, happy and nostalgic.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1163322-This is a calm swing music with drums, synth and trumpet responding to each other and makes you want to bounce</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1163322-This is a calm swing music with drums, synth and trumpet responding to each other and makes you want to bounce.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1163322-This is a calm swing music with drums, synth and trumpet responding to each other and makes you want to bounce.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1163322-This is a calm swing music with drums, synth and trumpet responding to each other and makes you want to bounce.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1122392-Electronic music with a high energy vibe that can possibly be used for a spin class or dance floor</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1122392-Electronic music with a high energy vibe that can possibly be used for a spin class or dance floor.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1122392-Electronic music with a high energy vibe that can possibly be used for a spin class or dance floor.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1122392-Electronic music with a high energy vibe that can possibly be used for a spin class or dance floor.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1135703-Contemporary trendy optimistic indie pop, with dirty drums, happy guitar comping and synthesizer solo</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1135703-Contemporary trendy optimistic indie pop, with dirty drums, happy guitar comping and synthesizer solo.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1135703-Contemporary trendy optimistic indie pop, with dirty drums, happy guitar comping and synthesizer solo.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1135703-Contemporary trendy optimistic indie pop, with dirty drums, happy guitar comping and synthesizer solo.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1119016-A garage rock-influenced song with lyrics about space which evokes psychedelia</p></td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/presto/1119016-A garage rock-influenced song with lyrics about space which evokes psychedelia.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/base/1119016-A garage rock-influenced song with lyrics about space which evokes psychedelia.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="cherrypicked_examples/sao/1119016-A garage rock-influenced song with lyrics about space which evokes psychedelia.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+
+            
+
+
+            </tbody>
+              </table>
+          </div>
+
+
+
+
+          <div class="section text-justify">
+            <h1>Song Describer Prompt Examples (Random)</h1>
+            Random Song Describer prompts. One prompt outputs.
+            <br><br>
+            <table class="table table-sm text-center" style="vertical-align: middle;">
+            <tbody>
+
+                <tr>
+                    </tr>        
+                    <tr>
+                    <td colspan="12"><h5 class="text-center">Text</h5></td>
+                    <td colspan="4"><h5 class="text-center">Presto (ours)</h5></td>
+                    <td colspan="4"><h5 class="text-center">Base DiT</h5></td>
+                    <td colspan="4"><h5 class="text-center">Stable Audio Open</h5></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="12"><p>1055022-This song that features a piano, cello and oboe starts calmly and then arrives to a crescendo to give a triumphant atmosphere</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1055022-This song that features a piano, cello and oboe starts calmly and then arrives to a crescendo to give a triumphant atmosphere.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1055022-This song that features a piano, cello and oboe starts calmly and then arrives to a crescendo to give a triumphant atmosphere.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1055022-This song that features a piano, cello and oboe starts calmly and then arrives to a crescendo to give a triumphant atmosphere.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>108303-Delayed synth blips and electronic drums combine on an ambient electronica track</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/108303-Delayed synth blips and electronic drums combine on an ambient electronica track.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/108303-Delayed synth blips and electronic drums combine on an ambient electronica track.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/108303-Delayed synth blips and electronic drums combine on an ambient electronica track.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>103887-Two electric guitars in conversation with each other, one with a wua-wua effect and the other with a strong delay effect</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/103887-Two electric guitars in conversation with each other, one with a wua-wua effect and the other with a strong delay effect.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/103887-Two electric guitars in conversation with each other, one with a wua-wua effect and the other with a strong delay effect.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/103887-Two electric guitars in conversation with each other, one with a wua-wua effect and the other with a strong delay effect.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1051196-country-pop relaxing song with happy mood and acoustic guitar, ideal for young girls going out shopping or dreaming about their love</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1051196-country-pop relaxing song with happy mood and acoustic guitar, ideal for young girls going out shopping or dreaming about their love.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1051196-country-pop relaxing song with happy mood and acoustic guitar, ideal for young girls going out shopping or dreaming about their love.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1051196-country-pop relaxing song with happy mood and acoustic guitar, ideal for young girls going out shopping or dreaming about their love.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/103892-bluesy guitar with a slow repetitive rythm in a smoky room in latin america.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1061473-oh, this is kind of post punk music, remind me my high school memory</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1061473-oh, this is kind of post punk music, remind me my high school memory.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1061473-oh, this is kind of post punk music, remind me my high school memory.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1061473-oh, this is kind of post punk music, remind me my high school memory.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1009671-Upbeat fast tempo with a blues rock feel that one can dance</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1009671-Upbeat fast tempo with a blues rock feel that one can dance.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1009671-Upbeat fast tempo with a blues rock feel that one can dance.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1009671-Upbeat fast tempo with a blues rock feel that one can dance.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1063454-A deeply soothing track featuring two string instruments makes one peaceful with theirselves and the world</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1063454-A deeply soothing track featuring two string instruments makes one peaceful with theirselves and the world.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1063454-A deeply soothing track featuring two string instruments makes one peaceful with theirselves and the world.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1063454-A deeply soothing track featuring two string instruments makes one peaceful with theirselves and the world.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1036934-Indie alike track to time-travel to mid 2000s</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1036934-Indie alike track to time-travel to mid 2000s.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1036934-Indie alike track to time-travel to mid 2000s.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1036934-Indie alike track to time-travel to mid 2000s.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1062831-Only instrumental and based on electronic samples that picks up as the song progresses</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1062831-Only instrumental and based on electronic samples that picks up as the song progresses.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1062831-Only instrumental and based on electronic samples that picks up as the song progresses.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1062831-Only instrumental and based on electronic samples that picks up as the song progresses.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1066198-Feels like there is an argument happening between two people with the constant beat making it like time is progressing forward which can be used for either casual listening, reminiscing on a memory or</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1066198-Feels like there is an argument happening between two people with the constant beat making it like time is progressing forward which can be used for either casual listening, reminiscing on a memory or.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1066198-Feels like there is an argument happening between two people with the constant beat making it like time is progressing forward which can be used for either casual listening, reminiscing on a memory or.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1066198-Feels like there is an argument happening between two people with the constant beat making it like time is progressing forward which can be used for either casual listening, reminiscing on a memory or.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1050845-Synthetic orchestral piece in the style of a 90s war movie battle scene soundtrack, with prominent bass drums and dry brass section harmonies</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1050845-Synthetic orchestral piece in the style of a 90s war movie battle scene soundtrack, with prominent bass drums and dry brass section harmonies.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1050845-Synthetic orchestral piece in the style of a 90s war movie battle scene soundtrack, with prominent bass drums and dry brass section harmonies.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1050845-Synthetic orchestral piece in the style of a 90s war movie battle scene soundtrack, with prominent bass drums and dry brass section harmonies.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1061369-Probably a three piece band with melodic guitar, heavy bass and drums playing an instrumental and energetic piece</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1061369-Probably a three piece band with melodic guitar, heavy bass and drums playing an instrumental and energetic piece.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1061369-Probably a three piece band with melodic guitar, heavy bass and drums playing an instrumental and energetic piece.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1061369-Probably a three piece band with melodic guitar, heavy bass and drums playing an instrumental and energetic piece.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1063332-Groovy instrumental funk rock track with occasional guitar solos that give you a feeling of longing</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1063332-Groovy instrumental funk rock track with occasional guitar solos that give you a feeling of longing.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1063332-Groovy instrumental funk rock track with occasional guitar solos that give you a feeling of longing.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1063332-Groovy instrumental funk rock track with occasional guitar solos that give you a feeling of longing.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>10575-A track with elements from eurodance and indie guitars</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/10575-A track with elements from eurodance and indie guitars.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/10575-A track with elements from eurodance and indie guitars.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/10575-A track with elements from eurodance and indie guitars.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1063331-An instrumental hopefully positive track where the foreground melody features a classic guitar</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1063331-An instrumental hopefully positive track where the foreground melody features a classic guitar.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1063331-An instrumental hopefully positive track where the foreground melody features a classic guitar.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1063331-An instrumental hopefully positive track where the foreground melody features a classic guitar.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1009672-A joyful and lively song that will make you want to dance right away</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1009672-A joyful and lively song that will make you want to dance right away.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1009672-A joyful and lively song that will make you want to dance right away.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1009672-A joyful and lively song that will make you want to dance right away.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1054396-fast and fun beat-based indie pop to set a protagonist-gets-good-at-x movie montage to</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1054396-fast and fun beat-based indie pop to set a protagonist-gets-good-at-x movie montage to.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1054396-fast and fun beat-based indie pop to set a protagonist-gets-good-at-x movie montage to.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1054396-fast and fun beat-based indie pop to set a protagonist-gets-good-at-x movie montage to.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1060600-Melodic jazz piece starting off with a solo sax intro and continues with smooth electric guitar and synthesizer riffs.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1007274-acoustic guitar solo track with consistent rhythm and repeating progression, suitable for a relaxing afternoon tea</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1007274-acoustic guitar solo track with consistent rhythm and repeating progression, suitable for a relaxing afternoon tea.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1007274-acoustic guitar solo track with consistent rhythm and repeating progression, suitable for a relaxing afternoon tea.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1007274-acoustic guitar solo track with consistent rhythm and repeating progression, suitable for a relaxing afternoon tea.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1004034-Electronic music that has a constant melody throughout with accompanying instruments used to supplement the melody which can be heard in possibly a casual setting</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1004034-Electronic music that has a constant melody throughout with accompanying instruments used to supplement the melody which can be heard in possibly a casual setting.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1004034-Electronic music that has a constant melody throughout with accompanying instruments used to supplement the melody which can be heard in possibly a casual setting.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1004034-Electronic music that has a constant melody throughout with accompanying instruments used to supplement the melody which can be heard in possibly a casual setting.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1053845-An electronic ambient track, with a dark tone The song progresses building the sections on top of each other A hollow percussion drum beat builds on top of a dark and soft harp, towards the end a viol</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1053845-An electronic ambient track, with a dark tone The song progresses building the sections on top of each other A hollow percussion drum beat builds on top of a dark and soft harp, towards the end a viol.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1053845-An electronic ambient track, with a dark tone The song progresses building the sections on top of each other A hollow percussion drum beat builds on top of a dark and soft harp, towards the end a viol.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1053845-An electronic ambient track, with a dark tone The song progresses building the sections on top of each other A hollow percussion drum beat builds on top of a dark and soft harp, towards the end a viol.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1051201-Im in a charismatic church and feeling sea sick from all the swaying to and fro</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1051201-Im in a charismatic church and feeling sea sick from all the swaying to and fro.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1051201-Im in a charismatic church and feeling sea sick from all the swaying to and fro.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1051201-Im in a charismatic church and feeling sea sick from all the swaying to and fro.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>103333-This is an instrumental track based on electronic samples that can be used before the start of a movie to give a doomsday or post apocalypse feel</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/103333-This is an instrumental track based on electronic samples that can be used before the start of a movie to give a doomsday or post apocalypse feel.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/103333-This is an instrumental track based on electronic samples that can be used before the start of a movie to give a doomsday or post apocalypse feel.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/103333-This is an instrumental track based on electronic samples that can be used before the start of a movie to give a doomsday or post apocalypse feel.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1066197-the song is moving piano is playing over long notes</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1066197-the song is moving piano is playing over long notes.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1066197-the song is moving piano is playing over long notes.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1066197-the song is moving piano is playing over long notes.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1054342-A slow tempo guitar picking song of a folk genre which can be played on a road trip it evokes a relaxed sensation.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1057890-A cinematic electronic soundtrack which announces the epic journey the protagonist will undertake in a post-apocalyptic world</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1057890-A cinematic electronic soundtrack which announces the epic journey the protagonist will undertake in a post-apocalyptic world.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1057890-A cinematic electronic soundtrack which announces the epic journey the protagonist will undertake in a post-apocalyptic world.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1057890-A cinematic electronic soundtrack which announces the epic journey the protagonist will undertake in a post-apocalyptic world.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1061384-An instrumental song that evokes some kind of a rush to go and declare your love</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1061384-An instrumental song that evokes some kind of a rush to go and declare your love.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1061384-An instrumental song that evokes some kind of a rush to go and declare your love.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1061384-An instrumental song that evokes some kind of a rush to go and declare your love.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1033252-A 70s style british pop song with drums, guitars, a synth violin sounds and finally bright piano chords</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1033252-A 70s style british pop song with drums, guitars, a synth violin sounds and finally bright piano chords.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1033252-A 70s style british pop song with drums, guitars, a synth violin sounds and finally bright piano chords.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1033252-A 70s style british pop song with drums, guitars, a synth violin sounds and finally bright piano chords.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                    <tr>
+                        <td colspan="12"><p>1051193-A song that's intensely personal as its superficial lyrics that take you to nowhere</p></td>
+                        <td colspan="4"><audio controls> <source src="random_examples/presto/1051193-A song thats intensely personal as its superficial lyrics that take you to nowhere.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/base/1051193-A song thats intensely personal as its superficial lyrics that take you to nowhere.mp3" type="audio/mp3"></audio> </td>
+                        <td colspan="4"><audio controls> <source src="random_examples/sao/1051193-A song thats intensely personal as its superficial lyrics that take you to nowhere.mp3" type="audio/mp3"></audio> </td>
+                   </tr>
+                    
+            
+                
+                    
+
+            
+
+
+            </tbody>
+              </table>
+          </div>
+
+          <hr>
+          <footer>
+              <div class="container">
+                  <div class="text-center">
+                  </div>
+              </div>
+          </footer>
+
+          </div>
+</div>
+
+<script>
+
+
+    // Add JavaScript to toggle the collapsible content
+    var buttons = document.querySelectorAll(".collapsible-button");
+    buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    });
+
+
+</script>
+				
+					
+</body>
+
+</html>
